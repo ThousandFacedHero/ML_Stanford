@@ -10,7 +10,8 @@ function [C, sigma] = dataset3Params(X, y, Xval, yval)
 % You need to return the following variables correctly.
 C = 1;
 sigma = 0.3;
-
+Error = 100;
+steprange = [0.01 0.03 0.1 0.3 1 3 10 30];
 % ====================== YOUR CODE HERE ======================
 % Instructions: Fill in this function to return the optimal C and sigma
 %               learning parameters found using the cross validation set.
@@ -23,10 +24,22 @@ sigma = 0.3;
 %        mean(double(predictions ~= yval))
 %
 
-
-
-
-
+for tempC = steprange
+  for tempSigma = steprange
+  
+    tempModel= svmTrain(X, y, tempC, @(x1, x2) ...
+      gaussianKernel(x1, x2, tempSigma));
+    tempPrediction = svmPredict(tempModel, Xval);
+    tempError = mean(double(tempPrediction ~= yval));
+    
+    if (tempError < Error)
+      C = tempC;
+      sigma = tempSigma;
+      Error = tempError;
+    endif
+    
+  endfor
+endfor
 
 
 % =========================================================================
