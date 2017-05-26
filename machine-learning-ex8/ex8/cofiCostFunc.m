@@ -41,17 +41,18 @@ Theta_grad = zeros(size(Theta));
 %
 
 
+predRating = X*Theta';
+movRateError = predRating-Y;
+error_factor = movRateError .* R;
 
+J = ((1/2)*(sum(sum(error_factor.^2))));
+J = J + ((lambda/2)*sum(sum(Theta.^2))) + ((lambda/2)*sum(sum(X.^2)));
 
+X_grad = error_factor*Theta;
+X_grad = X_grad + (lambda*X);
 
-
-
-
-
-
-
-
-
+Theta_grad = error_factor'*X;
+Theta_grad = Theta_grad + (lambda*Theta);
 
 
 
